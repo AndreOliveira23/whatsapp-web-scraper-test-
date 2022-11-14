@@ -5,8 +5,9 @@ Teste de web-scraping. A ideia inicial é coletar nome dos contatos e novas mens
 (Um projeto com motivações pessoais, que poderá vir a servir para eu e alguns amigos, mas cuja intenção principal é iniciar na linguagem Python).
 
 ## :books: Issues
-*POr enquanto, o script retorna 1 contato, de maneira estática, então, caso queira testar essa versão do código, é necessário logar com seu WhatsApp Web (eu por exemplo, estou usando uma conta secundária, especificamente para testes), inspecionar a página e buscar o seletor que guarda o nome do contato desjeado;
-*Geralmente, o nome do contato está numa tag <span> gerada dinamicamente, então, ao encontrá-la, basta selecionar uma parte do nome da class, e inserir no na linha 35. O mesmo processo deve ser feito para retornar a última mensagem do mesmo contato, alterando o seletor na linha 36
+Aparentemente, o WhatsApp Web gera as classes de maneria dinâmica. Caso queira testar essa versão do código, é necessário logar com seu WhatsApp Web (eu por exemplo, estou usando uma conta secundária, especificamente para testes), inspecionar a página e buscar o seletor que guarda o nome dos contatos;
+
+*Geralmente, o nome do contato está numa tag <span> gerada dinamicamente, então, ao encontrá-la, basta selecionar uma parte do nome da class, e inserir no na linha 40. O mesmo processo deve ser feito para retornar a última mensagem do mesmo contato, alterando o seletor na linha 41
 
 ## :wrench: Tecnologias utilizadas
 * Python;
@@ -21,7 +22,8 @@ python3 script.py
 ```
 
 ## :soon: Implementações futuras
-* Idealmente, o script deverá coletar os contatos de forma dinâmica;
+* Idealmente, o script deverá coletar os contatos de forma dinâmica (feito);
+* Próximo passo é conectar o PHP ao banco para enviar as mensagens armazenadas por email;
 * Várias outras ideias podem ser implementadas, mas vou buscar um passo de cada vez;
 
 ## :dart: Status do projeto
