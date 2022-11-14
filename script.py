@@ -1,3 +1,5 @@
+import time
+import itertools 
 import mysql.connector
 from time import sleep
 from threading import Timer
@@ -13,7 +15,7 @@ mydb = mysql.connector.connect(
   host="localhost",
   user="root",
   password="",
-  database ="tucuma_pdo"
+  database ="meubanco"
 )
 
 mycursor = mydb.cursor()
@@ -31,22 +33,26 @@ driver = webdriver.Chrome(service=serv, options=op)
 
 
 def scrap():
-    print("Executando a função...")
-    contato = driver. find_element(By.XPATH,"//span[contains(@class,'ggj6brxn')]").text #Contato: André Oliveira
-    ultima_msg = driver. find_element(By.XPATH,"//span[contains(@class,'Hy9nV')]").text #última mensagem no chat
-    print("Nome do contato:"+contato)
-    print("Última mensagem: "+ultima_msg)
-    now = datetime.now()
+    while True:
+        print("Executando a função...")
+        contatos = driver.find_elements(By.CLASS_NAME, "zoWT4") #Obtendo nome de todos os contatos presentes na tela
+        mensagens = driver.find_elements(By.CLASS_NAME, "_1qB8f") #Obtendo as últimas mensagens de cada chat
 
-    #inserindo contato e msg no banco de dados
-    # Banco = criar banco simples com campos que você quer extrair
-    # Esses campos extras estão nesse código por conta de outro banco que estou usando no momento da criação desse código
-    sql = "INSERT INTO usuarios (nome, ultima_msg, email,created) VALUES (%s, %s, %s, %s)"
-    val = (contato, ultima_msg, "teste@teste", now)
-    mycursor.execute(sql, val)
-    mydb.commit()
-    print(mycursor.rowcount, "registro inserido com sucesso!.")
-   
+        for(a,b) in zip(contatos,mensagens): #Combinando chat com suas respectivas últimas mensagens
+            print("Contato: ", end = '')
+            print(a.text)
+            print("Última Mensagem: ", end = '')
+            print(b.text)
+            
+            sql = "INSERT INTO whatsapp (Nome, Ultima_msg) VALUES (%s, %s)  ON DUPLICATE KEY UPDATE Ultima_msg=%s" #inserindo no banco de dados
+            val = (a.text, b.text,b.text)
+            mycursor.execute(sql, val)
+            mydb.commit()
+            if(mycursor.rowcount !=0 ): print ("Banco de dados atualizado com sucesso! ")
+            print("")    
+        time.sleep(10) #esperando 10 segundos antes de executar novamente
+        print("fim da iteração")
+    
 
 def pane_scroll(dr):
     global SCROLL_TO, SCROLL_SIZE
@@ -64,7 +70,6 @@ def main():
     t = Timer(20, scrap)
     t.start() 
 
-
     global SCROLL_TO, SCROLL_SIZE
     SCROLL_SIZE = 600
     SCROLL_TO = 600
@@ -73,9 +78,7 @@ def main():
     driver.get('https://web.whatsapp.com/')
 
     print("(Teste de web-scraping)")
-    input('Press enter to exit\n')
-
-
+    print('O código começará a executar assim que a página carregar totalmente!\n')
 
 if __name__ == "__main__":
     main()
