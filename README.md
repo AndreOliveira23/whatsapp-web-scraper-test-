@@ -12,7 +12,6 @@ Aparentemente, o WhatsApp Web gera as classes de maneria dinâmica. Caso queira 
 ## :wrench: Tecnologias utilizadas
 * Python;
 * Selenium;
-* PHP (futuramente);
 * MySQL;
 
 ## :rocket: Rodando o projeto
