@@ -23,9 +23,10 @@ python3 script.py
 ```
 
 ## :soon: Implementações futuras
-* Enviar as mensagens armazenadas no banco por email; (Falta refatorar o código e postar aqui)
-* Responder a mensagem no próprio email e a resposta também ser enviada pelo WhatsApp (ideia)
+* ~~Enviar as mensagens armazenadas no banco por email; (Falta refatorar o código e postar aqui)~~
+* Responder a mensagem no próprio email e a resposta também ser enviada pelo WhatsApp (ideia);
+* Identificar o número exato de mensagens e enviar no assunto do email. (Exemplo: "Você tem x novas mensagens...");
 * Várias outras ideias podem ser implementadas, mas vou buscar um passo de cada vez;
 
 ## :dart: Status do projeto
-Em pausa (período de provas da faculdade)
+Em desenvolvimento!!!
