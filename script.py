@@ -32,26 +32,54 @@ op.add_argument('user-data-dir=./User_Data')
 driver = webdriver.Chrome(service=serv, options=op)
 
 
+
+
+
 def scrap():
     while True:
         print("Executando a função...")
-        contatos = driver.find_elements(By.CLASS_NAME, "zoWT4") #Obtendo nome de todos os contatos presentes na tela
-        mensagens = driver.find_elements(By.CLASS_NAME, "_1qB8f") #Obtendo as últimas mensagens de cada chat
+        contatos = driver.find_elements(By.CLASS_NAME, "_3OvU8")#Recuperando toda a informação na div de cada contato
 
-        for(a,b) in zip(contatos,mensagens): #Combinando chat com suas respectivas últimas mensagens
-            print("Contato: ", end = '')
-            print(a.text)
-            print("Última Mensagem: ", end = '')
-            print(b.text)
+        #iterando sobre contatos        
+        for value in contatos:
             
-            sql = "INSERT INTO whatsapp (Nome, Ultima_msg) VALUES (%s, %s)  ON DUPLICATE KEY UPDATE Ultima_msg=%s" #inserindo no banco de dados
-            val = (a.text, b.text,b.text)
-            mycursor.execute(sql, val)
-            mydb.commit()
-            if(mycursor.rowcount !=0 ): print ("Banco de dados atualizado com sucesso! ")
-            print("")    
+            #Cada DIV no WhatsApp Web tem no mínimo 3 e no máximo 4 informações:
+            #Nome do contato, dia ou hora da última mensagem, a mensagem em si (essas três, sempre) e 
+            #o número de novas mensagens (somente para mensagens novas)
+            
+            #->A variável contatos guarda essas 3 ou 4 informações; Se o último caractere for um número, quer dizer que se trata
+            #de uma nova mensagem recebida (pois o número é o número de novas mensagens no chat); 
+            #Senão, quer dizer que a última mensagem foi enviada por você. (Por isso não tem número)
+
+            #Dessa forma, o script reconhece novas mensagens e consegue filtrar pra enviar por email
+            last = value.text[-1]
+
+            if(last.isnumeric()):
+                res = value.text.split() #Separando cada palavra para acessar os índices
+                contato = res[0]+" "+res[1]+" "+res[2]
+                ultimoIndex = res[len(res)-1] 
+                mensagem = res[4]
+                for x in range(5,len(res)-1,1):
+                   mensagem = mensagem+" "+res[x]
+
+                print(res)
+                print("Size res: ",end="")
+                print(len(res))
+                print("contato: "+contato)
+                print("Mensagem> "+mensagem)
+                
+                sql = "INSERT INTO whatsapp (Nome, Ultima_msg) VALUES (%s, %s)  ON DUPLICATE KEY UPDATE Ultima_msg=%s" #inserindo no banco de dados
+                val = (contato, mensagem, mensagem)
+                mycursor.execute(sql, val)
+                mydb.commit()
+                if(mycursor.rowcount !=0 ): print ("Banco de dados atualizado com sucesso! ")
+                print("")    
+                print("---------------------------------------------")
+
+
         time.sleep(10) #esperando 10 segundos antes de executar novamente
         print("fim da iteração")
+        print("-------------------------------------------------------------------------------------")
     
 
 def pane_scroll(dr):
