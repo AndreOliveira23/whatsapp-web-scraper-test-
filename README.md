@@ -29,4 +29,4 @@ python3 script.py
 * Várias outras ideias podem ser implementadas, mas vou buscar um passo de cada vez;
 
 ## :dart: Status do projeto
-Em desenvolvimento!!!
+Em pausa
